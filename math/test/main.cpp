@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 	Q_UNUSED(argv);
 //QGuiApplication a(argc,argv);
 
-	LDTEST( TriangulationTest )
+    LDTEST( TriangulationTest );
 
 	//BUG: テスト失敗。ld_float がdoubleのときに成功するように作ってある。えー
 	LDTEST( LDEulerAnglesTest );

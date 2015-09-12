@@ -1,0 +1,7 @@
+c:\users\yozora\documents\visual studio 2015\Projects\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\workspace\math\cs\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\workspace\math\cs\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\workspace\math\cs\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\workspace\math\cs\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+C:\workspace\math\cs\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\workspace\math\cs\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
