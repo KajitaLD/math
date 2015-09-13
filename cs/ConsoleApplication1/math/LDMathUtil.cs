@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
+using System.Diagnostics;
 
 namespace live2d
 {
@@ -340,7 +341,7 @@ namespace live2d
             LDPoint tmp2 = ((1 - (float)t1) * (from2 - from1) + (float)t1 * (to2 - to1));
 
 
-            Util.uAssert(!(tmp2.x() == 0 && tmp2.y() == 0));
+            Debug.Assert(!(tmp2.x() == 0 && tmp2.y() == 0));
 
             if (tmp2.x() == 0 && tmp2.y() != 0)
             {

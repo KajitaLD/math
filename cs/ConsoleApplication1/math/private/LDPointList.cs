@@ -23,5 +23,10 @@ namespace live2d
         {
             this[index] = p;
         }
+        public LDPointList add(LDPoint point)
+        {
+            this.Add(point);
+            return this;
+        }
     }
 }

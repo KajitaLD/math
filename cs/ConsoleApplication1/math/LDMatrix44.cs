@@ -315,7 +315,7 @@ namespace live2d
 */
         public void mult(LDMatrix44 b, LDMatrix44 dst, ld_bool omit4thRow = false)
         {
-            Debug.Assert(this != dst);
+            //Debug.Assert(this != dst);
 
             if (this == dst)
             {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 namespace live2d
 {
-    public class LDPoint
+    public class LDPoint:IComparable
     {
         private float xp { set; get; }
         private float yp { set; get; }
@@ -63,6 +63,17 @@ namespace live2d
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public int CompareTo(object obj)
+        {
+            if(obj.GetType() != this.GetType())
+            {
+                return -1;
+            }
+            var a = obj as LDPoint;
+            if(a == this) { return 0; }
+            return -1;
         }
 
         public static LDPoint operator +(LDPoint a, LDPoint b)

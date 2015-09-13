@@ -112,7 +112,7 @@ namespace live2d
                         }
                     }
                 }
-                return cn % 2 == 0 ? false : true;
+                return !(cn % 2 == 0);
             }
             else
             {
@@ -149,7 +149,7 @@ namespace live2d
                     }
                     // ルール1,ルール2を確認することで、ルール3も確認できている。
                 }
-                return wn == 0 ? false : true;
+                return !(wn == 0);
             }
 
         }

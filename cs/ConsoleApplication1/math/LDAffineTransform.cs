@@ -10,7 +10,7 @@ namespace live2d
     //2Dのアフィン変換を行う
     public class LDAffineTransform
     {
-        private LDMatrix44 m_matrix;
+        private LDMatrix44 m_matrix=new LDMatrix44();
         public LDAffineTransform() { m_matrix.identity(); }
         public void translate(ld_float x, ld_float y) { m_matrix.translate(x, y, 0); }
         public void translate(LDPoint pt) { translate(pt.x(), pt.y()); }

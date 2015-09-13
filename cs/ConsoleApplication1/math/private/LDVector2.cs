@@ -13,7 +13,7 @@ namespace live2d
 
         public LDVector2() { }
         public LDVector2(float xpos, float ypos) { this.xp = xpos; this.yp = ypos; }
-        public LDVector2(LDPoint point) { this.xp = point.x(); this.xp = point.y(); }
+        public LDVector2(LDPoint point) { this.xp = point.x(); this.yp = point.y(); }
 
         public bool isNull() { return MathFunctions.uIsNull(xp) && MathFunctions.uIsNull(yp); }
 

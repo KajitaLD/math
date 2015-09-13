@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define EUC_3D_COORD_RIGHT_HAND     //右手座標系/右手法則による回転の時に 1
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -355,7 +357,57 @@ namespace live2d
         //------ 設定 -------
         public void fromQuaterion(LDQuat q)
         {
+#if Zero
+	// http://miffysora.wikidot.com/quaternion:matrix
+	ld_float  ww = 2.0f * q.w ;
+	ld_float  xx = 2.0f * q.x ;
+	ld_float  yy = 2.0f * q.y ;
+	ld_float  zz = 2.0f * q.z ;
 
+	// TODO 最適化
+	m11 = 1.0f - yy*q.y + zz*q.z ;
+	m12 = xx*q.y + ww*q.z ;
+	m13 = xx*q.z - ww*q.y ;
+
+	m21 = xx*q.y - ww*q.z ;
+	m22 = 1.0f - zz*q.z + xx*q.x ;
+	m23 = yy*q.z + ww*q.x ;
+
+	m31 = xx*q.z + ww*q.y ;
+	m32 = yy*q.z - ww*q.x ;
+	m33 = 1.0f - xx*q.x + yy*q.y ;
+
+	// 平行移動をなくす
+	tx = ty = tz = 0.0f ;
+
+
+#else
+            //ゲーム3D数学方式（左手系）
+#if EUC_3D_COORD_RIGHT_HAND
+            ld_float ww = -2.0f * q.w;
+#else
+            ld_float ww = 2.0f * q.w;
+#endif
+            ld_float xx = 2.0f * q.x;
+            ld_float yy = 2.0f * q.y;
+            ld_float zz = 2.0f * q.z;
+
+            // TODO 最適化
+            m11 = 1.0f - yy * q.y - zz * q.z;
+            m12 = xx * q.y + ww * q.z;
+            m13 = xx * q.z - ww * q.y;
+
+            m21 = xx * q.y - ww * q.z;
+            m22 = 1.0f - xx * q.x - zz * q.z;
+            m23 = yy * q.z + ww * q.x;
+
+            m31 = xx * q.z + ww * q.y;
+            m32 = yy * q.z - ww * q.x;
+            m33 = 1.0f - xx * q.x - yy * q.y;
+
+            // 平行移動をなくす
+            tx = ty = tz = 0.0f;
+#endif
         }
 
         //------ デバッグ -------

@@ -56,10 +56,19 @@ namespace live2d
         }
         public LDRect normalized()
         {
-            throw new NotImplementedException();
+            LDRect normalized = new LDRect(this);
+            if (normalized.w < 0)
+            {
+                normalized.xp = this.right();
+                normalized.w *= -1;
+            }
+            if (normalized.h < 0)
+            {
+                normalized.yp = this.bottom();
+                normalized.h *= -1;
+            }
+            return normalized;
         }
-
-
         public float left() { return xp; }
         public float top() { return yp; }
         public float right() { return xp + w; }
@@ -189,38 +198,56 @@ namespace live2d
 
         public static LDRect operator |(LDRect a, LDRect b)
         {
-            throw new NotImplementedException();
+            return new LDRect(a.united(b));
         }
         public static LDRect operator &(LDRect a, LDRect b)
         {
-            throw new NotImplementedException();
+            return new LDRect(a.intersected(b));
         }
 
         public bool contains(LDRect r)
         {
-            throw new NotImplementedException();
+            return this.contains(r.topLeft()) && this.contains(r.topRight()) && this.contains(r.bottomLeft()) && this.contains(r.bottomRight());
+
         }
         public bool contains(LDPoint p)
         {
-            throw new NotImplementedException();
+            var a = this.normalized();
+            return a.left() <= p.x() && a.right() >= p.x() && a.top() <= p.y() && a.bottom() >= p.y();
         }
 
         public bool contains(float x, float y) { return this.contains(new LDPoint(x, y)); }
 
         public LDRect united(LDRect other)
         {
-            throw new NotImplementedException();
+            LDRect a = this.normalized();
+            LDRect b = other.normalized();
+
+            LDRect intersected = new LDRect(0, 0, 0, 0);
+            intersected.setTop(Math.Min(a.top(), b.top()));
+            intersected.setBottom(Math.Max(a.bottom(), b.bottom()));
+            intersected.setLeft(Math.Min(a.left(), b.left()));
+            intersected.setRight(Math.Max(a.right(), b.right()));
+            return intersected;
         }
 
         public LDRect intersected(LDRect other)
         {
-            throw new NotImplementedException();
+            LDRect a = this.normalized();
+            LDRect b = other.normalized();
+
+            LDRect intersected = new LDRect(0, 0, 0, 0);
+            intersected.setTop(Math.Max(a.top(), b.top()));
+            intersected.setBottom(Math.Min(a.bottom(), b.bottom()));
+            intersected.setLeft(Math.Max(a.left(), b.left()));
+            intersected.setRight(Math.Min(a.right(), b.right()));
+            return intersected;
         }
 
 
         public bool intersects(LDRect r)
         {
-            throw new NotImplementedException();
+            return this.intersected(r).isValid();
         }
 
         public LDRect marginsAdded(LDMargins margins)

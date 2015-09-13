@@ -76,7 +76,7 @@ namespace live2d
         * @brief オブジェクト空間->慣性空間へのクォータニオンからオイラー角を設定
         * @param &q クォータニオンをセットする
         */
-        void fromObjectToInertialQuaternion(LDQuat q)
+        public void fromObjectToInertialQuaternion(LDQuat q)
         {
             ld_float sp = -2.0f * (q.y * q.z - q.w * q.x);
 
@@ -101,7 +101,7 @@ namespace live2d
         * @brief 慣性空間->オブジェクト空間へのクォータニオンからオイラー角を設定
         * @param &q クォータニオンをセットする
         */
-        void fromInertialToObjectQuaternion(LDQuat q)
+        public void fromInertialToObjectQuaternion(LDQuat q)
         {
             ld_float sp = -2.0f * (q.y * q.z + q.w * q.x);
 
@@ -124,7 +124,18 @@ namespace live2d
         * @brief オブジェクト空間->世界座標への変換行列をオイラー角に変換する(この行列は直交している必要がある)
         * @param &m Ematrix44をセットする
         */
-        void fromObjectToWorldMatrix(LDMatrix44 m)
+        public void fromObjectToWorldMatrix(LDMatrix44 m)
+        {
+
+            throw new NotImplementedException();
+
+        }
+
+        /**
+	    * @brief 世界座標->オブジェクト空間への変換行列をオイラー角に変換する(この行列は直交している必要がある)
+	    * @param &m Ematrix44をセットする
+	    */
+        public void fromWorldToObjectMatrix(LDMatrix44 m)
         {
             // m23からsin(pitch)を取り出す
             ld_float sp = -m.m23;
@@ -143,13 +154,13 @@ namespace live2d
                 pitch = (ld_float)Math.Asin(sp);
                 bank = (ld_float)Math.Atan2(m.m21, m.m22);
             }
-
-            /**
-            * @brief 回転行列をオイラー角に変換する
-            * @param &m RotationMatrixをセットする
-            */
-            //	void  fromRotationMatrix( const RotationMatrix &m ) ;
-
         }
+
+
+        /**
+        * @brief 回転行列をオイラー角に変換する
+        * @param &m RotationMatrixをセットする
+        */
+        //	void  fromRotationMatrix( const RotationMatrix &m ) ;
     }
 }

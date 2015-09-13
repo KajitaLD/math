@@ -11,7 +11,7 @@ namespace live2d
 
         private LDPoint pt1;
         private LDPoint pt2;
-        
+
         public LDLine()
         {
             pt1 = new LDPoint(); pt2 = new LDPoint();
@@ -67,7 +67,7 @@ namespace live2d
 
         public bool isNull()
         {
-            return MathFunctions.uFuzzyCompare(pt1.x(), pt2.x()) &&  MathFunctions.uFuzzyCompare(pt1.y(), pt2.y());
+            return MathFunctions.uFuzzyCompare(pt1.x(), pt2.x()) && MathFunctions.uFuzzyCompare(pt1.y(), pt2.y());
         }
 
         public LDPoint p1()
@@ -77,7 +77,7 @@ namespace live2d
 
         public LDPoint p2()
         {
-            return this.pt1;
+            return this.pt2;
         }
 
         public float dx()
@@ -154,7 +154,7 @@ namespace live2d
 
         public float angle()
         {
-            if(this.isNull())
+            if (this.isNull())
             {
                 return 0;
             }
@@ -172,7 +172,7 @@ namespace live2d
         }
         public float angleTo(LDLine l)
         {
-            return l.angle()- this.angle() >= 0 ? l.angle() - this.angle() : l.angle() - this.angle() + 360;
+            return l.angle() - this.angle() >= 0 ? l.angle() - this.angle() : l.angle() - this.angle() + 360;
         }
 
         public LDPoint pointAt(float t)
@@ -187,7 +187,7 @@ namespace live2d
 
         public static bool operator !=(LDLine a, LDLine b)
         {
-            return !(a==b);
+            return !(a == b);
         }
 
         public override bool Equals(object obj)
@@ -199,13 +199,39 @@ namespace live2d
         }
 
         /// <summary>
-        /// out Upoint 未実装
+        /// 
         /// </summary>
         /// <param name="l"></param>
         /// <param name="point"></param>
         /// <returns></returns>
         public IntersectType intersect(LDLine l, out LDPoint point)
         {
+            LDPoint pointA = this.pt1;
+            LDPoint pointB = this.pt2;
+            LDPoint pointC = l.pt1;
+            LDPoint pointD = l.pt2;
+
+            float dBunbo = (pointB.x() - pointA.x())
+                    * (pointD.y() - pointC.y())
+                    - (pointB.y() - pointA.y())
+                    * (pointD.x() - pointC.x());
+            if (0 == dBunbo)
+            {   // 平行
+                point = null;
+                return IntersectType.NoIntersection;
+            }
+
+            //ここで交点を導出
+            LDPoint vectorAC = pointC - pointA;
+            var dR = ((pointD.y() - pointC.y()) * vectorAC.x()
+                 - (pointD.x() - pointC.x()) * vectorAC.y()) / dBunbo;
+            var dS = ((pointB.y() - pointA.y()) * vectorAC.x()
+                 - (pointB.x() - pointA.x()) * vectorAC.y()) / dBunbo;
+            point = pointA + dR * (pointB - pointA);
+
+            return (new LDRect(pointA, pointB)).contains(point) && (new LDRect(pointC, pointD)).contains(point) ? IntersectType.BoundedIntersection : IntersectType.UnboundedIntersection;
+
+            /*
             IntersectType intersect;
             if (MathFunctions.uFuzzyCompare(this.angle(), l.angle()))
             {
@@ -233,14 +259,14 @@ namespace live2d
                 }
             }
             return intersect;
-
+            */
         }
 
 
 
         public LDLine unitVector()
         {
-            if(this.length() == 0)
+            if (this.length() == 0)
             {
                 return this;
             }

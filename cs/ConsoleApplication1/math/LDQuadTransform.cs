@@ -134,7 +134,7 @@ namespace live2d
         //マッピングされた座標系に含まれるかどうか
         public bool contains(LDPoint map)
         {
-            return getPolygon().containsPoint(map, FillRule.WindingFill);
+            return getPolygon().containsPoint(map, FillRule.OddEvenFill);
         }
         public LDPolygon getPolygon()
         {
@@ -163,9 +163,9 @@ namespace live2d
         public LDPoint getBottomRight() { return m_bottomRight; }
         public LDPoint getBottomLeft() { return m_bottomLeft; }
 
-        private LDPoint m_topLeft;
-        private LDPoint m_topRight;
-        private LDPoint m_bottomRight;
-        private LDPoint m_bottomLeft;
+        private LDPoint m_topLeft=new LDPoint();
+        private LDPoint m_topRight = new LDPoint();
+        private LDPoint m_bottomRight = new LDPoint();
+        private LDPoint m_bottomLeft = new LDPoint();
     }
 }

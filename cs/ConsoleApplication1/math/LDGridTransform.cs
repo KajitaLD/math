@@ -29,6 +29,11 @@ namespace live2d
             clearBoundsCache();
         }
 
+        public LDGridTransform(LDGridTransform from)
+        {
+            this.copyFrom(from);
+        }
+
         public LDGridTransform(LDPoint topLeft, LDPoint bottomRight, int row = 1, int col = 1)
             : this(topLeft.x(), topLeft.y(), bottomRight.x() - topLeft.x(), bottomRight.y() - topLeft.y(), row, col)
         {
@@ -176,7 +181,7 @@ namespace live2d
                 //TODO:到達しない場所あります
                 local = quad.inverseTransform(pt, clip);
 
-                LDPoint _internal;
+                LDPoint _internal=new LDPoint();
                 _internal.setX((col + 1) * (1.0f / (getColumn() + 2)) + local.x() / (getColumn() + 2));
                 _internal.setY((row + 1) * (1.0f / (getRow() + 2)) + local.y() / (getRow() + 2));
 
@@ -783,8 +788,19 @@ namespace live2d
 
         public void copyFrom(LDGridTransform src)
         {
-            m_gridPoints = src.m_gridPoints;
-            m_originRect = src.m_originRect;
+
+            m_gridPoints = new List<List<LDPoint>>();
+            foreach(var p in src.m_gridPoints)
+            {
+                m_gridPoints.Add(new List<LDPoint>());
+                foreach(var q in p)
+                {
+                    m_gridPoints[m_gridPoints.Count - 1].Add(new LDPoint(q));
+                }
+            }
+
+            m_originRect = new LDRect(src.m_originRect); 
+            
         }
         //指定位置からのコピー
         public void copyFrom(LDGridTransform src, int row, int col)
@@ -811,11 +827,11 @@ namespace live2d
             m_cacheBounds.setSize(new LDSize(0, 0));
         }
 
-        private List<List<LDPoint>> m_gridPoints;
-        private LDRect m_originRect;
+        private List<List<LDPoint>> m_gridPoints=new List<List<LDPoint>>();
+        private LDRect m_originRect=new LDRect();
 
         //当たり判定最適化のため、編集のない間は矩形を使いまわす
-        private LDRect m_cacheBounds;
+        private LDRect m_cacheBounds=new LDRect();
 
         public static bool operator ==(LDGridTransform a, LDGridTransform b)
         {

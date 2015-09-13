@@ -147,7 +147,7 @@ namespace live2d
         * @brief 回転軸を取り出して返す
         * @return 回転軸を返す
         */
-        LDVector3 getAxis()
+        public LDVector3 getAxis()
         {
             ld_float sinQ_over2Sq = 1.0f - w * w;
 
@@ -266,7 +266,7 @@ namespace live2d
         * @param &v2 EVector3をセットする
         * @param useNormalize 正規化する場合はtrue, そうでない場合はfalseをセットする。(入力無き場合はtrue)
         */
-        void setToRotationArc(LDVector3 v1, LDVector3 v2, bool useNormalize = true)
+        public void setToRotationArc(LDVector3 v1, LDVector3 v2, bool useNormalize = true)
         {
             LDVector3 vv1;
             LDVector3 vv2;
@@ -306,7 +306,7 @@ namespace live2d
         * @brief オブジェクト空間->慣性空間への回転
         * @param &orientation オイラー角(EEulerAngles)をセットする
         */
-        void setToRotateObjectToInertial(LDEulerAngles orientation)
+        public void setToRotateObjectToInertial(LDEulerAngles orientation)
         {
             ld_float sp, sb, sh;
             ld_float cp, cb, ch;
@@ -325,7 +325,7 @@ namespace live2d
         * @brief 慣性空間->オブジェクト空間への回転
         * @param &orientation オイラー角(EEulerAngles)をセットする
         */
-        void setToRotateInertialToObject(LDEulerAngles orientation)
+        public void setToRotateInertialToObject(LDEulerAngles orientation)
         {
             ld_float sp, sb, sh;
             ld_float cp, cb, ch;
@@ -346,7 +346,7 @@ namespace live2d
         * @param t　補間位置を表す数値をセットする
         * @return 補間結果を返す
         */
-        LDQuat slerp(LDQuat q1, ld_float t)
+        public LDQuat slerp(LDQuat q1, ld_float t)
         {
             LDQuat q0 = this;
 
@@ -412,7 +412,7 @@ namespace live2d
         * @param t　補間位置を表す数値をセットする
         * @return 補間結果を返す
         */
-        LDQuat mySlerp(LDQuat q1, ld_float t)
+        public LDQuat mySlerp(LDQuat q1, ld_float t)
         {
             LDQuat q0 = this;
 
@@ -465,7 +465,7 @@ namespace live2d
         * @param exponent クォータニオンの乗数をセットする
         * @return クォータニオンの累乗を返す
 */
-        LDQuat pow(ld_float exponent)
+        public LDQuat pow(ld_float exponent)
         {
             LDQuat q = this;
             if (Math.Abs(q.w) > 0.9999f)

@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using System.Collections;
 
 namespace live2d
 {
-    public class LDIndexLineList : List<LDIndexLine>, IComparer<LDIndexLine>
+    public class LDIndexLineList : List<LDIndexLine>, IComparer<LDIndexLine>, IComparable
     {
         public LDIndexLineList() { }
+        public LDIndexLineList add(LDIndexLine line)
+        {
+            this.Add(line);
+            return this;
+        }
         public int size()
         {
             return this.Count;
@@ -31,7 +37,7 @@ namespace live2d
                 LDIndexLine line = new LDIndexLine(indices[i], indices[i + 1]);
                 this.Add(line);
             }
-            LDIndexLine last = new LDIndexLine(indices.ElementAt(indices.Count - 1), indices.ElementAt(indices.Count - 1));
+            LDIndexLine last = new LDIndexLine(indices.ElementAt(indices.Count - 1), indices.ElementAt(0));
             this.Add(last);
         }
 
@@ -96,6 +102,26 @@ namespace live2d
                 if (e1.getIndex2() < e2.getIndex2())
                     return 1;
             return -1;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj.GetType() != this.GetType()) return -1;
+            var p = obj as LDIndexLineList;
+            return this == p ? 0 : -1;
+        }
+        public static bool operator ==(LDIndexLineList a, LDIndexLineList b)
+        {
+            if (a.Count != b.Count) return false;
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (a[i] != b[i]) return false;
+            }
+            return true;
+        }
+        public static bool operator !=(LDIndexLineList a, LDIndexLineList b)
+        {
+            return !(a == b);
         }
         //LD_SERIALIZABLE;
     }
