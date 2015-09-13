@@ -104,6 +104,7 @@ namespace live2d.math
             {
                 //A2-2-1) スタックSの一番上のedgeをpopする．これを辺ABとする
                 LDIndexLine lineAB = uncheckedLines.Last();
+                uncheckedLines.RemoveAt(uncheckedLines.Count - 1);
 
                 //線と接する2つの三角形を取得
                 LDTriangleList relatedTriangles = triangles.find(lineAB);
@@ -144,13 +145,13 @@ namespace live2d.math
             Debug.Assert(!(ta == tb));
             Debug.Assert(ta.isSharedLine(tb));
 
-            LDIndexLineList uncheckedLines=new LDIndexLineList();
+            LDIndexLineList uncheckedLines = new LDIndexLineList();
 
             //指定の線で繋がっていない点を取得
             int index1 = ta.getIndexWithoutLine(l);
             int index2 = tb.getIndexWithoutLine(l);
 
-            LDTriangle tc=new LDTriangle(index1, index2, l.getIndex1());
+            LDTriangle tc = new LDTriangle(index1, index2, l.getIndex1());
             LDTriangle td = new LDTriangle(index1, index2, l.getIndex2());
 
             triangles.RemoveAll(triangle => triangle == ta);

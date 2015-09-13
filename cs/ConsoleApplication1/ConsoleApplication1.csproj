@@ -51,7 +51,11 @@
     <Compile Include="LDMathUtilTest.cs" />
     <Compile Include="LDMatrix44Test.cs" />
     <Compile Include="LDMatrix43Test.cs" />
+    <Compile Include="LDQuadTransformTest.cs" />
     <Compile Include="LDQuatTest.cs" />
+    <Compile Include="LDSimpleAffineTransformTest.cs" />
+    <Compile Include="LDTrianglListTest.cs" />
+    <Compile Include="LDVector3Test.cs" />
     <Compile Include="math\CurveUtil.cs" />
     <Compile Include="math\LDAffineTransform.cs" />
     <Compile Include="math\LDCircle.cs" />
@@ -88,6 +92,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestUtil.cs" />
+    <Compile Include="TriangulationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

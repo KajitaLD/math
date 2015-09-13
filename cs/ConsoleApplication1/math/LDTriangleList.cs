@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace live2d
 {
-    public class LDTriangleList : List<LDTriangle>
+    public class LDTriangleList : List<LDTriangle>,IComparable
     {
         public LDTriangleList() { }
 
@@ -300,5 +300,25 @@ namespace live2d
             return indexs;
         }
 
+        public int CompareTo(object obj)
+        {
+            if (obj.GetType() != this.GetType()) return -1;
+            var p =  obj as LDTriangleList;
+            if(p.Count == this.Count)
+            {
+                for(int i =0; i< this.Count; i++)
+                {
+                    if(p[i] != this[i])
+                    {
+                        return -1;
+                    }
+                }
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
     }
 }

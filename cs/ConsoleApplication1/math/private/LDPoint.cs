@@ -12,6 +12,8 @@ namespace live2d
         public LDPoint() { this.xp = 0; this.yp = 0; }
         public LDPoint(LDPoint p) { this.xp = p.xp; this.yp = p.yp; }
         public LDPoint(float xpos, float ypos) { this.xp = xpos; this.yp = ypos; }
+        public LDPoint(double xpos, double ypos) { this.xp = (float)xpos; this.yp = (float)ypos; }
+
 
         public float manhattanLength()
         {

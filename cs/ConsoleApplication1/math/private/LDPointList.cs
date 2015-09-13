@@ -5,7 +5,7 @@ using System.Text;
 
 namespace live2d
 {
-    public class LDPointList:List<LDPoint>
+    public class LDPointList:List<LDPoint> , IComparable
     {
         public int length()
         {
@@ -27,6 +27,27 @@ namespace live2d
         {
             this.Add(point);
             return this;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj.GetType() != this.GetType()) return -1;
+            var p = obj as LDPointList;
+            if (p.Count == this.Count)
+            {
+                for (int i = 0; i < this.Count; i++)
+                {
+                    if (p[i] != this[i])
+                    {
+                        return -1;
+                    }
+                }
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 }

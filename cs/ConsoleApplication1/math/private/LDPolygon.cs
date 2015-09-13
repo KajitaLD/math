@@ -5,7 +5,7 @@ using System.Text;
 
 namespace live2d
 {
-    public class LDPolygon : List<LDPoint>
+    public class LDPolygon : List<LDPoint>,IComparable
     {
         public LDPolygon() { }
         public LDPolygon(int size) : base(size) { }
@@ -182,6 +182,27 @@ namespace live2d
         public LDPolygon subtracted(LDPolygon r)
         {
             throw new NotImplementedException();
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj.GetType() != this.GetType()) return -1;
+            var p = obj as LDPolygon;
+            if (p.Count == this.Count)
+            {
+                for (int i = 0; i < this.Count; i++)
+                {
+                    if (p[i] != this[i])
+                    {
+                        return -1;
+                    }
+                }
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         //operator QVariant();

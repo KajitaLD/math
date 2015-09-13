@@ -700,6 +700,140 @@ PASS: Void normalizeTest()
 PASS: Void normalizeTest()
 Totals: 86 passed, 3 failed, 1 questioned.
 ********* Finished testing of live2d.LDQuatTest *********
+********* Start testing of live2d.LDQuadTransformTest *********
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void transformTest()
+PASS: Void transformTest()
+PASS: Void LDFUZZY_COMPARE(Single, Double, Double)
+PASS: Void LDFUZZY_COMPARE(Single, Double, Double)
+PASS: Void inverseTransformTest()
+PASS: Void inverseTransformTest()
+PASS: Void LDFUZZY_COMPARE(Single, Double, Double)
+PASS: Void LDFUZZY_COMPARE(Single, Double, Double)
+PASS: Void inverseTransformTest()
+PASS: Void inverseTransformTest()
+PASS: Void inverseTransformTest()
+PASS: Void inverseTransformTest()
+PASS: Void LDFUZZY_COMPARE(Single, Double, Double)
+PASS: Void LDFUZZY_COMPARE(Single, Double, Double)
+PASS: Void inverseTransformTest()
+PASS: Void inverseTransformTest()
+PASS: Void LDFUZZY_COMPARE(Single, Double, Double)
+FAILED: Void LDFUZZY_COMPARE(Single, Double, Double) Compared values are not the same
+ expected: 20.5396
+ actual: 20.53957
+PASS: Void LDFUZZY_COMPARE(Single, Double, Double)
+FAILED: Void LDFUZZY_COMPARE(Single, Double, Double) Compared values are not the same
+ expected: 2072.54
+ actual: 2072.539
+PASS: Void rotationTest()
+PASS: Void rotationTest()
+PASS: Void rotationTest()
+PASS: Void rotationTest()
+PASS: Void extendedTransformTest()
+PASS: Void extendedTransformTest()
+PASS: Void extendedTransformTest()
+PASS: Void extendedTransformTest()
+PASS: Void extendedTransformTest()
+PASS: Void extendedTransformTest()
+PASS: Void extendedTransformTest()
+PASS: Void extendedTransformTest()
+PASS: Void extendedTransformTest()
+PASS: Void extendedTransformTest()
+PASS: Void LDFUZZY_COMPARE(Single, Double, Double)
+FAILED: Void LDFUZZY_COMPARE(Single, Double, Double) Compared values are not the same
+ expected: 60.5396
+ actual: 60.53964
+FAILED: Void LDFUZZY_COMPARE(Single, Double, Double) Compared values are not the same
+ expected: 11515.87
+ actual: 11515.94
+FAILED: Void LDFUZZY_COMPARE(Single, Double, Double) Compared values are not the same
+ expected: 62072.54
+ actual: 62072.48
+FAILED: Void LDFUZZY_COMPARE(Single, Double, Double) Compared values are not the same
+ expected: 5.8731
+ actual: 5.873217
+FAILED: Void LDFUZZY_COMPARE(Single, Double, Double) Compared values are not the same
+ expected: 72.5396
+ actual: 72.53924
+Totals: 44 passed, 7 failed, 0 questioned.
+********* Finished testing of live2d.LDQuadTransformTest *********
+********* Start testing of live2d.LDSimpleAffineTransformTest *********
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void simpleTransformTest()
+PASS: Void inverseTransformTest()
+FAILED: Void LDFUZZY_COMPARE(Single, Double, Double) Compared values are not the same
+ expected: -4.371139E-08
+ actual: 0
+Totals: 5 passed, 1 failed, 0 questioned.
+********* Finished testing of live2d.LDSimpleAffineTransformTest *********
+********* Start testing of live2d.LDTrianglListTest *********
+PASS: Void findTest_simple()
+PASS: Void toIndexLineListTest_simple()
+PASS: Void getOutlinePointIndicesTest_simple()
+PASS: Void getOutlinePointsTest_simple()
+PASS: Void getOutlinePolygonTest_simple()
+PASS: Void getRelatedTrianglesTest_simple()
+PASS: Void getRelatedLinesTest_simple()
+PASS: Void getRelatedPointIndicesTest_simple()
+Totals: 8 passed, 0 failed, 0 questioned.
+********* Finished testing of live2d.LDTrianglListTest *********
+********* Start testing of live2d.LDVector3Test *********
+PASS: Void normalizeTest()
+PASS: Void normalizeTest()
+PASS: Void normalizeTest()
+PASS: Void normalizeTest()
+PASS: Void normalizeTest()
+PASS: Void normalizeTest()
+PASS: Void lengthTest()
+PASS: Void lengthTest()
+PASS: Void lengthTest()
+PASS: Void lengthTest()
+PASS: Void dotProductTest()
+PASS: Void dotProductTest()
+PASS: Void crossProductTest()
+PASS: Void crossProductTest()
+PASS: Void crossProductTest()
+PASS: Void crossProductTest()
+PASS: Void crossProductTest()
+PASS: Void crossProductTest()
+PASS: Void dotTest()
+PASS: Void dotTest()
+PASS: Void distanceTest()
+PASS: Void distanceTest()
+PASS: Void blendTest()
+PASS: Void blendTest()
+PASS: Void blendTest()
+PASS: Void blendTest()
+PASS: Void blendTest()
+PASS: Void blendTest()
+Totals: 28 passed, 0 failed, 0 questioned.
+********* Finished testing of live2d.LDVector3Test *********
+********* Start testing of live2d.math.TriangulationTest *********
+PASS: Void triangulationTest()
+PASS: Void triangulationTest()
+PASS: Void triangulationTest()
+PASS: Void triangulationTest()
+PASS: Void triangulationTest()
+FAILED: Void triangulationTest() Compared values are not the same
+ expected: 1
+ actual: 2
+FAILED: Void triangulationTest() Verified value but failed.
+PASS: Void triangulationTest()
+Totals: 6 passed, 2 failed, 0 questioned.
+********* Finished testing of live2d.math.TriangulationTest *********
 ********* Final Score *********
-Totals: 644 passed, 9 failed, 6 questioned, 0 skipped.
+Totals: 735 passed, 19 failed, 6 questioned, 0 skipped.
 ********* Finished *********

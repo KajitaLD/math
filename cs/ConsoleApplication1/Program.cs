@@ -21,6 +21,11 @@ namespace ConsoleApplication1
             TestUtil.LDTEST(new LDMatrix43Test());
             TestUtil.LDTEST(new LDMatrix44Test());
             TestUtil.LDTEST(new LDQuatTest());
+            TestUtil.LDTEST(new LDQuadTransformTest());
+            TestUtil.LDTEST(new LDSimpleAffineTransformTest());
+            TestUtil.LDTEST(new LDTrianglListTest());
+            TestUtil.LDTEST(new LDVector3Test());
+            TestUtil.LDTEST(new live2d.math.TriangulationTest());
             TestUtil.SCORE();
             tw.Flush();
 

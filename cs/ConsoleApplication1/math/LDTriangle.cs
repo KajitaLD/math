@@ -30,10 +30,10 @@ namespace live2d
 
             LDPolygon v = new LDPolygon();
 
-            v.Add(points.at(m_index1));
-            v.Add(points.at(m_index2));
-            v.Add(points.at(m_index3));
-            return new LDPolygon(v);
+            v.Add(new LDPoint( points.at(m_index1)));
+            v.Add(new LDPoint(points.at(m_index2)));
+            v.Add(new LDPoint(points.at(m_index3)));
+            return v;
         }
 
         public void setClockWise(LDPointList form, ClockWise clockWise)

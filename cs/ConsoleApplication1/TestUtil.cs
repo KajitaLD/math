@@ -8,13 +8,13 @@ namespace live2d
 {
     public class TestUtil
     {
-        static int PASSED  = 0;
-        static int FAILED  = 0;
-        static int QUESTION  = 0;
-        static int SKIPPED  = 0;
+        static int PASSED = 0;
+        static int FAILED = 0;
+        static int QUESTION = 0;
+        static int SKIPPED = 0;
 
-        static int ALL_PASSED   = 0;
-        static int ALL_FAILED   = 0;
+        static int ALL_PASSED = 0;
+        static int ALL_FAILED = 0;
         static int ALL_QUESTION = 0;
         static int ALL_SKIPPED = 0;
 
@@ -60,6 +60,73 @@ namespace live2d
 
             }
         }
+        public static void COMPARELIST<T>(List<T> a, List<T> b)
+            where T : IComparable
+        {
+            try
+            {
+                if (a.Count != b.Count)
+                {
+                    FAILED++;
+                    System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace();
+                    Console.WriteLine("FAILED: " + st.GetFrame(1).GetMethod() + " Compared values are not the same");
+                    Console.WriteLine(" expected: " + a.ToString());
+                    Console.WriteLine(" actual: " + b.ToString());
+                    return;
+                }
+                else
+                {
+                    for (int i = 0; i < a.Count; i++)
+                    {
+                        if (a[i].CompareTo(b[i]) != 0)
+                        {
+                            FAILED++;
+                            System.Diagnostics.StackTrace st2 = new System.Diagnostics.StackTrace();
+                            Console.WriteLine("FAILED: " + st2.GetFrame(1).GetMethod() + " Compared values are not the same");
+                            Console.WriteLine(" expected: " + a.ToString());
+                            Console.WriteLine(" actual: " + b.ToString());
+                            return;
+                        }
+                    }
+                    PASSED++;
+                    System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace();
+                    Console.WriteLine("PASS: " + st.GetFrame(1).GetMethod());
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                SKIPPED++;
+                System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace();
+                Console.WriteLine("SKIPPED: " + st.GetFrame(1).GetMethod() + ex.Message);
+
+            }
+        }
+        public static void LDFUZZY_COMPARE(float a, float b, float fuzzy)
+        {
+            if ((float)Math.Abs(a - b) <= (float)Math.Min(a, b) * fuzzy)
+            {
+                PASSED++;
+                System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace();
+                Console.WriteLine("PASS: " + st.GetFrame(1).GetMethod());
+            }
+            else
+            {
+                FAILED++;
+                System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace();
+                Console.WriteLine("FAILED: " + st.GetFrame(1).GetMethod() + " Compared values are not the same");
+                Console.WriteLine(" expected: " + a.ToString());
+                Console.WriteLine(" actual: " + b.ToString());
+            }
+        }
+        public static void LDFUZZY_COMPARE(float a, double b, double fuzzy)
+        {
+            LDFUZZY_COMPARE(a, (float)b, (float)fuzzy);
+        }
+        public static void LDFUZZY_COMPARE(double a, double b, double fuzzy)
+        {
+            LDFUZZY_COMPARE((float)a, (float)b, (float)fuzzy);
+        }
 
         public static void VERIFY(bool go)
         {
@@ -94,7 +161,7 @@ namespace live2d
         {
             try
             {
-                
+
                 PASSED = FAILED = SKIPPED = QUESTION = 0;
                 Console.WriteLine("********* Start testing of " + t.GetType().ToString() + " *********");
                 t.test();
