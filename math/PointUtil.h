@@ -44,6 +44,18 @@ public:
 		return QVector2D(pt).distanceToPoint(QVector2D(target)) <= hitRange;
 	}
 
+	//円周上と当たるかどうか
+	static bool isHitCircleLine(const LDPoint& pt,float radius,const LDPoint& target,float hitRange)
+	{
+		float distance= math::PointUtil::distance(pt,target);
+
+		if(distance>radius-hitRange && distance<radius+hitRange)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	static float distance(const LDPoint& a,const LDPoint& b)
 	{
 		return QVector2D(a).distanceToPoint(QVector2D(b));

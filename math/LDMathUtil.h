@@ -157,12 +157,38 @@ public:
 	template<typename T>
 	static T lerp( T from, T to,float t )
 	{
-		return ( 1-t )*from + t*to;
+		T result = ( 1-t )*from + t*to;
+//		if(result > -TOLERANCE && result < 0){
+//			result= 0.0;
+//		}
+//		if(result-1.0 < TOLERANCE && result-1 > 0){
+//			result = 1.0;
+//		}
+		return result;
 	}
+//	template<>
+//	static LDPoint lerp(LDPoint from, LDPoint to,float t )
+//	{
+//		LDPoint result = ( 1-t )*from + t*to;
+//		if(result.x() > -TOLERANCE && result.x() < 0){
+//			result.setX(0.0);
+//		}
+//		if(result.y() > -TOLERANCE && result.y() < 0){
+//			result.setY(0.0);
+//		}
+//		if(result.x()-1.0 < TOLERANCE && result.x()-1 > 0){
+//			result.setX(1.0);
+//		}
+//		if(result.y()-1.0 < TOLERANCE && result.y()-1 > 0){
+//			result.setY(1.0);
+//		}
+//		return result;
+//	}
 
 	template<typename T>
 	static float inverseLerp( T from, T to,T value )
 	{
+        Q_ASSERT(!(from == to));
 		return (value-from)/(to-from);
 	}
 
@@ -178,7 +204,7 @@ public:
 	}
 
 	template<typename T>
-	static void inverseLerp2D( T from1, T to1,T from2, T to2,T value,double& t1,double& t2 )
+	static bool inverseLerp2D( T from1, T to1,T from2, T to2,T value,double& t1,double& t2)
 	{
 //		参考 stackoverflow "Inverse Bilinear Interpolation?"
 //		http://stackoverflow.com/questions/808441/inverse-bilinear-interpolation
@@ -199,29 +225,82 @@ public:
 
 		double d=(a-2*b+c);
 
-		if(d==0||abs(d)<0.0001)
+		if(d==0||fabs(d)<TOLERANCE)
 		{
+			Q_ASSERT(!fuzzyCompare( a,c,TOLERANCE));
 			t1=a/(a-c);
 //			qDebug()<<"d==0"<<t1;
 		}
 		else
 		{
-			t1=((a-b)+sqrt(b*b-a*c))/d;//NOTE:ここに入ると変換の形状が壊れる
+			t1=((a-b)+sqrt(b*b-a*c))/d;
+			if(t1-1.0 > 0 && t1-1.0 < TOLERANCE)
+			{
+				t1 = 1.0;
+			}
+			if( -t1 > -TOLERANCE && t1 < 0)
+			{
+				t1 = 0;
+			}
+			double _t1=((a-b)-sqrt(b*b-a*c))/d;
+			if(t1 > 1 || t1 < 0)
+			{
+				if(_t1 <= 1 && _t1 >= 0)
+				{
+					t1 = _t1;
+				}else
+				{
+					return false;
+					Q_ASSERT(false);
+				}
+			}
+			//TODO: 結果がNanになるときがあるので、別の計算(見た目は少しずれるかも)に切り替える。そもそもNanになるのが怪しい動作。
+//			if(isnan(t1))
+//			{
+//				t1=((a-b)-sqrt(b*b-a*c))/d;
+				if(isnan(t1))
+				{
+                    Q_ASSERT(false);
+					t1=a/(a-c);
+					Q_ASSERT( ! isnan(t1) );
+				}
+//			}
 //			qDebug()<<"d!=0"<<t1<<"or"<<((a-b)-sqrt(b*b-a*c))/d;
 		}
 
 //		t = ( (1-s)*(x0-x) + s*(x1-x) ) / ( (1-s)*(x0-x2) + s*(x1-x3) )
 //		t2=((1-t1)*(from2.y()-value.y())+t1*(to2.y()-value.y())) / ((1-t1)*(from2.y()-from1.y())+t1*(to2.y()-to1.y()));
-		LDPoint tmp1=((1-t1)*(from2-value)+t1*(to2-value)) ;
-		LDPoint tmp2=((1-t1)*(from2-from1)+t1*(to2-to1));
+		LDPoint tmp1=((1-t1)*(from2-value)+t1*(to2-value)) ;//(1-s)*(x0-x) + s*(x1-x) )
+		LDPoint tmp2=((1-t1)*(from2-from1)+t1*(to2-to1));//(1-s)*(x0-x2) + s*(x1-x3)
 
-		Q_ASSERT( !(tmp2.x()==0&&tmp2.y()==0));
+		if((tmp2.x()==0&&tmp2.y()==0))
+		{
+			return false;
+		}
 
-		if (tmp2.x()==0&&tmp2.y()!=0) {
+
+//		if(fabs(tmp1.x())<TOLERANCE)
+//		{
+//			tmp1.setX(0);
+//		}
+//		if(fabs(tmp1.y())<TOLERANCE)
+//		{
+//			tmp1.setY(0);
+//		}
+//		if(fabs(tmp2.x())<TOLERANCE)
+//		{
+//			tmp2.setX(0);
+//		}
+//		if(fabs(tmp2.y())<TOLERANCE)
+//		{
+//			tmp2.setY(0);
+//		}
+		if ((tmp2.y()!=0) || fuzzyCompare( tmp1.x() , 0.0,TOLERANCE) && value.x() > value.y()) {
 			t2=tmp1.y()/tmp2.y();
 		}
 		else //if(tmp2.y()==0&&tmp2.x()!=0)
 		{
+			Q_ASSERT(tmp2.x()!=0);
 			t2=tmp1.x()/tmp2.x();
 		}
 //		else
@@ -232,6 +311,27 @@ public:
 //		}
 
 		t2=1-t2;
+
+
+//		if(fabs(t1-1)<TOLERANCE)
+//		{
+//			t1=1;
+//		}
+//		if(fabs(t2-1)<TOLERANCE)
+//		{
+//			t2=1;
+//		}
+//		if(fabs(t1)<TOLERANCE)
+//		{
+//			t1=0;
+//		}
+//		if(fabs(t2)<TOLERANCE)
+//		{
+//			t2=0;
+//		}
+		t1 = clamp(t1,0.0,1.0);
+		t2 = clamp(t2,0.0,1.0);
+		return true;
 	}
 
 	template<typename T>
@@ -253,7 +353,7 @@ public:
 	template<typename T>
 	static bool fuzzyCompare(T a,T b,float fuzz)
 	{
-		return abs(a - b) <= fuzz;
+		return fabs(a - b) <= fuzz;
 	}
 
 	template<>
@@ -265,15 +365,30 @@ public:
 		}
 		for (int i = 0; i < a.length(); ++i)
 		{
-			if(abs(a[i].x()-b[i].x())>fuzz)
-			{
-				return false;
-			}
-			if(abs(a[i].y()-b[i].y())>fuzz)
-			{
-				return false;
-			}
+			fuzzyCompare<LDPoint>(a[i],b[i],fuzz);
+//			if(fabs(a[i].x()-b[i].x())>fuzz)
+//			{
+//				return false;
+//			}
+//			if(fabs(a[i].y()-b[i].y())>fuzz)
+//			{
+//				return false;
+//			}
 		}
+		return true;
+	}
+	template<>
+	static bool fuzzyCompare<LDPoint>(LDPoint a,LDPoint b,float fuzz)
+	{
+		if(fabs(a.x()-b.x())>fuzz)
+		{
+			return false;
+		}
+		if(fabs(a.y()-b.y())>fuzz)
+		{
+			return false;
+		}
+
 		return true;
 	}
 private:

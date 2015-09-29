@@ -23,7 +23,8 @@ SOURCES += \
     $$PWD/LDBezierTransform.cpp \
     $$PWD/LDBezierPoint.cpp \
     $$PWD/CurveUtil.cpp \
-    $$PWD/LDUvMesh.cpp
+    $$PWD/LDUvMesh.cpp \
+    $$PWD/LDSquareTransform.cpp
 
 
 HEADERS  += \
@@ -53,4 +54,5 @@ HEADERS  += \
     $$PWD/LDBezierTransform.h \
     $$PWD/LDBezierPoint.h \
     $$PWD/CurveUtil.h \
-    $$PWD/LDUvMesh.h
+    $$PWD/LDUvMesh.h \
+    $$PWD/LDSquareTransform.h

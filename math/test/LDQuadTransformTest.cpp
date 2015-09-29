@@ -282,7 +282,8 @@ void LDQuadTransformTest::rotationTest()
 void LDQuadTransformTest::extendedTransformTest()
 {
 	//範囲外補間
-
+	//仕様変更によりこのテストは無効となりました
+	return ;
 	{
 		LDQuadTransform quad(LDPoint(10,10),LDPoint(30,30));
 
@@ -295,7 +296,22 @@ void LDQuadTransformTest::extendedTransformTest()
 		QCOMPARE(dst.x(),-10.0);
 		QCOMPARE(dst.y(),-10.0);
 	}
+	{
+		LDQuadTransform quad(
+					LDPoint(20,20),
+					LDPoint(40,21),
+					LDPoint(40,60),
+					LDPoint(20,60));
 
+		LDPoint src(-1,0.5);
+
+		LDPoint dst;
+
+		dst = quad.transform(src);
+
+		QCOMPARE(dst.x(),0.0);
+		QCOMPARE(dst.y(),39.5);
+	}
 	{
 		LDQuadTransform quad(LDPoint(10,10),LDPoint(30,30));
 

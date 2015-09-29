@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @brief The EucVector3f class
  * ld_float型 ３次元ベクトルクラス
  * OpenGL準拠の列ベクトル(縦に並ぶ)として用いる前提

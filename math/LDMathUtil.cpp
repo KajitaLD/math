@@ -10,8 +10,8 @@ const ld_float	LDMathUtil::PI2				= LDMathUtil::PI * 2.0f ;    //!< @brief EUC_P
 const ld_float	LDMathUtil::PI_OVER_2		= LDMathUtil::PI / 2.0f ;    //!< @brief EUC_PI / 2.0f ;
 const ld_float	LDMathUtil::ONE_OVER_PI		= 1.0f / LDMathUtil::PI ;    //!< @brief 1.0f / EUC_PI ;
 const ld_float	LDMathUtil::ONE_OVER_PI2		= 1.0f / LDMathUtil::PI2 ;   //!< @brief 1.0f / EUC_2PI ;
-const ld_float	LDMathUtil::TOLERANCE			=0.0001f;				//!< @brief 通常計算時の許容誤差 ;
-const ld_float	LDMathUtil::GINBAL_TOLERANCE	=0.0001f;				//!< @brief ジンバルロック時の許容誤差 ;
+const ld_float	LDMathUtil::TOLERANCE			=0.000001;				//!< @brief 通常計算時の許容誤差 ;
+const ld_float	LDMathUtil::GINBAL_TOLERANCE	=0.000001;				//!< @brief ジンバルロック時の許容誤差 ;
 
 
 #if LD_CORE_ENABLE_QT

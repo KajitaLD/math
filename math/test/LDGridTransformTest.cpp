@@ -21,6 +21,9 @@ namespace live2d {
 
 using namespace serialize;
 
+//テスト時の許容誤差
+static const double FUZZ=0.0000001;
+
 void LDGridTransformTest::serializeTest()
 {
 	const char* name="gridMesh";
@@ -87,6 +90,21 @@ void LDGridTransformTest::simpleTransformTest()
 		dst=grid.transform(src);
 
 		QCOMPARE(dst.getTranslate(),LDPoint(40,40));
+	}
+
+
+	{
+		LDGridTransform grid(
+					LDPoint(20,20),
+					LDPoint(45,20),
+					LDPoint(40,40),
+					LDPoint(20,45),
+					2,2);
+		LDPoint src(0,0);
+
+		auto point=grid.transform(src);
+
+		QCOMPARE(point,LDPoint(20,20));
 	}
 }
 
@@ -294,10 +312,10 @@ void LDGridTransformTest::inverseTransformTest()
 
 
 		dst.setForm(points);
-		LDFUZZY_COMPARE(dst.getPoint(0,0).x(),0.1,0.0000001);
-		LDFUZZY_COMPARE(dst.getPoint(2,2).x(),0.8,0.0000001);
-		LDFUZZY_COMPARE(dst.getPoint(2,0).x(),0.1,0.0000001);
-		LDFUZZY_COMPARE(dst.getPoint(2,0).y(),0.8,0.0000001);
+		LDFUZZY_COMPARE(dst.getPoint(0,0).x(),0.1,FUZZ);
+		LDFUZZY_COMPARE(dst.getPoint(2,2).x(),0.8,FUZZ);
+		LDFUZZY_COMPARE(dst.getPoint(2,0).x(),0.1,FUZZ);
+		LDFUZZY_COMPARE(dst.getPoint(2,0).y(),0.8,FUZZ);
 	}
 
 	{
@@ -310,7 +328,7 @@ void LDGridTransformTest::inverseTransformTest()
 		auto rest=grid.transform(points);
 
 		dst.setForm(points);
-		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),0.0000001));
+		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),FUZZ));
 	}
 	{
 		LDGridTransform grid(2530.53125,2540.62423,4015.614312,4026.94645,2,2);
@@ -322,7 +340,7 @@ void LDGridTransformTest::inverseTransformTest()
 		auto rest=grid.transform(points);
 
 		dst.setForm(points);
-		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),0.0000001));
+		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),FUZZ));
 	}
 	{
 		LDGridTransform grid(
@@ -338,7 +356,7 @@ void LDGridTransformTest::inverseTransformTest()
 		auto rest=grid.transform(points);
 
 		dst.setForm(points);
-		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),0.0000001));
+		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),FUZZ));
 	}
 	{
 		LDGridTransform grid(
@@ -354,7 +372,7 @@ void LDGridTransformTest::inverseTransformTest()
 		auto rest=grid.transform(points);
 
 		dst.setForm(points);
-		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),0.0000001));
+		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),FUZZ));
 	}
 }
 
@@ -362,22 +380,23 @@ void LDGridTransformTest::extendedTransformTest()
 {
 	{
 		//拡張したGridの取得
-		LDGridTransform src(20,20,40,40,3,3);
+		LDGridTransform src(20,20,60,60,3,3);
 		LDGridTransform dst=src.createExtendedGrid();
 
-		QCOMPARE(dst.getRow(),4);
-		QCOMPARE(dst.getColumn(),4);
-		QCOMPARE(dst.getPoint(0,0),LDPoint(-20,-20));
-		QCOMPARE(dst.getPoint(0,1),LDPoint(10,-20));
-		QCOMPARE(dst.getPoint(0,2),LDPoint(40,-20));
-		QCOMPARE(dst.getPoint(0,3),LDPoint(70,-20));
-		QCOMPARE(dst.getPoint(0,4),LDPoint(100,-20));
+		QCOMPARE(dst.getRow(),5);
+		QCOMPARE(dst.getColumn(),5);
+		QCOMPARE(dst.getPoint(0,0),LDPoint(20 - src.getExtendRate()*60,20 - src.getExtendRate()*60));
+		QCOMPARE(dst.getPoint(0,1),LDPoint(20,20 - src.getExtendRate()*60));
+//		QCOMPARE(dst.getPoint(0,2),LDPoint(40,-40));
+//		QCOMPARE(dst.getPoint(0,3),LDPoint(60,-40));
+		QCOMPARE(dst.getPoint(0,4),LDPoint(80,20- src.getExtendRate()*60));
+		QCOMPARE(dst.getPoint(0,5),LDPoint(80 + src.getExtendRate()*60,20- src.getExtendRate()*60));
 		QCOMPARE(dst.getPoint(1,1),LDPoint(20,20));
 	}
 
 	{
 		//範囲外 順変換 クリッピング
-		LDGridTransform grid(20,20,40,40,1,1);
+		LDGridTransform grid(20,20,40,40,2,2);
 		LDPoint src(-1,-1);
 
 		LDPoint dst;
@@ -389,27 +408,219 @@ void LDGridTransformTest::extendedTransformTest()
 	}
 	{
 		//範囲外 順変換
-		LDGridTransform grid(20,20,40,40,1,1);
+		LDGridTransform grid(20,20,40,40,2,2);
+		LDPoint src(-0.5,-0.5);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),20-(double)grid.getExtendRate()*40/2);
+		QCOMPARE(dst.y(),20-(double)grid.getExtendRate()*40/2);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,2,2);
 		LDPoint src(-1,-1);
 
 		LDPoint dst;
 
 		dst = grid.transform(src);
 
-		QCOMPARE(dst.x(),-20.0);
-		QCOMPARE(dst.y(),-20.0);
+		QCOMPARE(dst.x(),(double)20-(double)grid.getExtendRate()*40);
+		QCOMPARE(dst.y(),(double)20-(double)grid.getExtendRate()*40);
 	}
 	{
 		//範囲外 順変換
-		LDGridTransform grid(20,20,40,40,1,1);
-		LDPoint src(-10,-10);
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(-2,-2);
 
 		LDPoint dst;
 
 		dst = grid.transform(src);
 
-		QCOMPARE(dst.x(),-380.0);
-		QCOMPARE(dst.y(),-380.0);
+		QCOMPARE(dst.x(),(double)20-((2*grid.getExtendRate()+1)*40)*grid.getExtendRate()-grid.getExtendRate()*40);
+		QCOMPARE(dst.y(),(double)20-((2*grid.getExtendRate()+1)*40)*grid.getExtendRate()-grid.getExtendRate()*40);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,2,2);
+		LDPoint src(-3,-3);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),(double)20-(2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+1)*40*grid.getExtendRate()-((2*grid.getExtendRate()+1)*40)*grid.getExtendRate()-grid.getExtendRate()*40);
+		QCOMPARE(dst.y(),(double)20-(2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+1)*40*grid.getExtendRate()-((2*grid.getExtendRate()+1)*40)*grid.getExtendRate()-grid.getExtendRate()*40);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,2,2);
+		LDPoint src(0,-1);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),20.0);
+		QCOMPARE(dst.y(),20.0 -(double)grid.getExtendRate()*40);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,2,2);
+		LDPoint src(-1,0);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),20.0 - (double)grid.getExtendRate()*40);
+		QCOMPARE(dst.y(),20.0);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(1.5,1.5);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),60.0 + (double)grid.getExtendRate()*40/2);
+		QCOMPARE(dst.y(),60.0 + (double)grid.getExtendRate()*40/2);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(2,2);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),(double)20 + (grid.getExtendRate()+1)*40);
+		QCOMPARE(dst.y(),(double)20 + (grid.getExtendRate()+1)*40);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(4,4);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),(double)20+(grid.getExtendRate()+1)*40 + (2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+2)*40*grid.getExtendRate());
+		QCOMPARE(dst.y(),(double)20+(grid.getExtendRate()+1)*40 + (2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+2)*40*grid.getExtendRate());
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(-3,4);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),(double)20-(2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+1)*40*grid.getExtendRate()-((2*grid.getExtendRate()+1)*40)*grid.getExtendRate()-grid.getExtendRate()*40);
+		QCOMPARE(dst.y(),(double)20+(grid.getExtendRate()+1)*40 + (2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+2)*40*grid.getExtendRate());
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(4,-3);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),(double)20+(grid.getExtendRate()+1)*40 + (2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+2)*40*grid.getExtendRate());
+		QCOMPARE(dst.y(),(double)20-(2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+1)*40*grid.getExtendRate()-((2*grid.getExtendRate()+1)*40)*grid.getExtendRate()-grid.getExtendRate()*40);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(0,2);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),20.0);
+		QCOMPARE(dst.y(),(double)20 + (grid.getExtendRate()+1)*40);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,2,2);
+		LDPoint src(-3,4);
+		grid.setPoint(1,1,LDPoint(25,30));
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),(double)20-(2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+1)*40*grid.getExtendRate()-((2*grid.getExtendRate()+1)*40)*grid.getExtendRate()-grid.getExtendRate()*40);
+		QCOMPARE(dst.y(),(double)20+(grid.getExtendRate()+1)*40 + (2*grid.getExtendRate()+1)*(2*grid.getExtendRate()+2)*40*grid.getExtendRate());
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(2,0);
+
+		LDPoint dst;
+
+		dst = grid.transform(src);
+
+		QCOMPARE(dst.x(),(double)20 + (grid.getExtendRate()+1)*40);
+		QCOMPARE(dst.y(),20.0);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(
+					LDPoint(20,20),
+					LDPoint(45,20),
+					LDPoint(40,40),
+					LDPoint(20,45),
+					2,2);
+		LDPoint src(-1,-1);
+
+		auto point=grid.transform(src);
+
+		auto rest=grid.inverseTransform(point);
+
+		QCOMPARE(rest,src);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(
+					LDPoint(20,20),
+					LDPoint(45,20),
+					LDPoint(40,40),
+					LDPoint(20,45),
+					2,2);
+		LDPoint src(2,-1);
+
+		grid.setPoint(1,1,LDPoint(25,24));
+
+		auto point=grid.transform(src);
+		auto rest=grid.inverseTransform(point);
+		QCOMPARE(rest,src);
+	}
+	{
+		//範囲外 順変換
+		LDGridTransform grid(
+					LDPoint(20,20),
+					LDPoint(45,20),
+					LDPoint(40,40),
+					LDPoint(20,45),
+					20,20);
+		LDPoint src(5,-5);
+
+		grid.setPoint(1,1,LDPoint(25,24));
+
+		auto point=grid.inverseTransform(src);
+		auto rest=grid.transform(point);
+		QCOMPARE(rest,src);
 	}
 	{
 		//範囲外 逆変換 クリッピング
@@ -432,16 +643,53 @@ void LDGridTransformTest::extendedTransformTest()
 
 		dst = grid.inverseTransform(src);
 
-		QCOMPARE(dst.x(),-1.0);
-		QCOMPARE(dst.y(),-1.0);
+		QCOMPARE(dst.x(),-1.0/grid.getExtendRate());
+		QCOMPARE(dst.y(),-1.0/grid.getExtendRate());
 	}
+	{
+		//範囲外 逆変換
+		LDGridTransform grid(20,20,40,40,2,2);
+		LDPoint src(40,-20);
 
+		LDPoint dst;
+
+		dst = grid.inverseTransform(src);
+
+		QCOMPARE(dst.x(),0.5);
+		QCOMPARE(dst.y(),-1.0/grid.getExtendRate());
+	}
+	{
+		//範囲外 逆変換
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(100,100);
+
+		LDPoint dst;
+
+		dst = grid.inverseTransform(src);
+
+		QCOMPARE(dst.x(),1.0+(double)40/40/grid.getExtendRate());
+		QCOMPARE(dst.y(),1.0+(double)40/40/grid.getExtendRate());
+	}
+	{
+		//範囲外 逆変換
+		LDGridTransform grid(20,20,40,40,4,4);
+		LDPoint src(100,100);
+
+		LDPoint dst;
+
+		dst = grid.inverseTransform(src);
+
+		QCOMPARE(dst.x(),1.0+(double)40/40/grid.getExtendRate());
+		QCOMPARE(dst.y(),1.0+(double)40/40/grid.getExtendRate());
+	}
 	{
 		LDGridTransform grid(
 					LDPoint(20.53125,20.62423)
 					,LDPoint(40.53125,20.62423)
 					,LDPoint(45.53125,45.62423)
 					,LDPoint(20.614312,40.94645),2,2);
+		//デフォルトサイズ内に入らないため
+		grid.setExtendRate(1000);
 		LDGridTransform src(3425.0134623,2412.9143,5252-2412.090023,5212-2451.00001,2,8);
 
 		LDGridTransform dst=src;
@@ -450,7 +698,7 @@ void LDGridTransformTest::extendedTransformTest()
 		auto rest=grid.transform(points);
 
 		dst.setForm(points);
-		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),0.0000001));
+		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),FUZZ));
 	}
 	{
 		LDGridTransform grid(
@@ -466,7 +714,7 @@ void LDGridTransformTest::extendedTransformTest()
 		auto rest=grid.transform(points);
 
 		dst.setForm(points);
-		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),0.0000001));
+		QVERIFY(LDMathUtil::fuzzyCompare(rest,src.toForm(),FUZZ));
 	}
 }
 
